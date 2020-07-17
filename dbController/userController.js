@@ -8,7 +8,6 @@ module.exports = {
   signUp: async (req, res) => {
     var myData = await User.SignUp(req.body, res)
     try {
-      // console.log(User.finAll())
       const saltRounds = 10;
       var hash = await bcrypt.hash(req.body.password, saltRounds);
       req.body.password = hash

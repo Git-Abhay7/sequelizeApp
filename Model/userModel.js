@@ -1,6 +1,7 @@
 const Sequelize = require("sequelize");
 var utils = require("../commonFunction/utils");
 var sequelize = require("../dbConnection/connection");
+const bcrypt = require("bcrypt");
 
 const UserModel = sequelize.define(
   "USER", {
@@ -16,10 +17,7 @@ const UserModel = sequelize.define(
     lastName: {
       type: Sequelize.STRING,
     },
-    email: {
-      type: Sequelize.STRING,
-      unique: true,
-    },
+
     password: {
       type: Sequelize.STRING,
     },
@@ -31,6 +29,29 @@ const UserModel = sequelize.define(
       allowNull: false,
       type: Sequelize.DATE,
     },
+
+    email: {
+      type: Sequelize.STRING,
+    },
+  }, {
+    hooks: {
+      beforeCreate: async function (USER, Options) {
+
+        var result = await this.findOne({
+          where: {
+            email: USER.email,
+          },
+        });
+
+        if (result) {
+          if (result.email == USER.email) {
+
+            throw (utils.Error_Message.EmailExist);
+          }
+
+        }
+      },
+    },
   }, {
     freezeTableName: true,
   }
@@ -39,23 +60,14 @@ UserModel.sync();
 
 UserModel.SignUp = async (body, res) => {
   try {
-    var result = await UserModel.findOne({
-      where: {
-        email: body.email
-      }
-   })
-   console.log(result.email)
-    if (result) {
-      if (result.email == body.email) {
-        res
-          .status(utils.Error_Code.AlreadyExist)
-          .send(utils.Error_Message.EmailExist);
-      }
-    }
+    const saltRounds = 10;
+    var hash = await bcrypt.hash(body.password, saltRounds);
+    body.password = hash;
+    var data = await UserModel.create(body);
+    return data;
   } catch (error) {
     throw error;
   }
-
-}
+};
 
 module.exports = UserModel;

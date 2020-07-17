@@ -35,18 +35,16 @@ const UserModel = sequelize.define(
     freezeTableName: true,
   }
 );
-UserModel.sync({
-  force: true
-});
+UserModel.sync();
 
 UserModel.SignUp = async (body, res) => {
-
   try {
     var result = await UserModel.findOne({
       where: {
         email: body.email
       }
    })
+   console.log(result.email)
     if (result) {
       if (result.email == body.email) {
         res

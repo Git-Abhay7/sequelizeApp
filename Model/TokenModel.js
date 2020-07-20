@@ -25,6 +25,6 @@ const tokenModel = sequelize.define("token", {
         type: Sequelize.INTEGER
     }
 }, {
-    timeStamps
+    freezeTableName: true,
 }
 );

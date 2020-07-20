@@ -13,11 +13,10 @@ module.exports = {
   },
   valid: () => {
     return [
-      check("user_id").notEmpty().withMessage("Please fill userId field"),
-      check("mobileNumber")
+      check("email").notEmpty().withMessage("Please fill Email field"),
+      check("password")
         .notEmpty()
-        .withMessage("Please fill mobileNumber field."),
-      check("dob").notEmpty().withMessage("Please fill dob field.").isISO8601(),
+        .withMessage("Please fill Password.")
     ];
   },
 };

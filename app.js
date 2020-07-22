@@ -6,9 +6,17 @@ var logger = require("morgan");
 require("./dbConnection/connection");
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
+var passport = require("passport");
+require("./passport-config");
+require("./passport.js");
+var session = require("express-session");
 
 var app = express();
-
+app.use(
+  session({ secret: "keyboard cat", resave: true, saveUninitialized: true })
+);
+app.use(passport.initialize());
+app.use(passport.session());
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");

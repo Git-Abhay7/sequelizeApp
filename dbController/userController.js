@@ -2,9 +2,11 @@ var User = require("../model/userModel");
 const TOKEN = require("../Model/TokenModel");
 const validation = require("../commonFunction/validation");
 var utils = require("../commonFunction/utils");
-const {
-  TokenExpiredError
-} = require("jsonwebtoken");
+const jwt = require("jsonwebtoken");
+const fetch = require("node-fetch");
+const cheerio = require("cheerio");
+
+// var rp = require('request-promise')
 
 module.exports = {
   signUp: async (req, res) => {
@@ -21,6 +23,7 @@ module.exports = {
   },
   login: async (req, res) => {
     var result = await User.LogIn(req.body, res);
+
     try {
       if (result == false) {
         res
@@ -43,7 +46,7 @@ module.exports = {
     const Result = await TOKEN.Data(req.body);
     try {
       res.status(utils.Success_Code.Success).json({
-        Result
+        Result,
       });
     } catch (error) {
       return res
@@ -55,7 +58,7 @@ module.exports = {
     const fetched = await TOKEN.GetUser(req.params);
     try {
       res.status(utils.Success_Code.Success).json({
-        fetched
+        fetched,
       });
     } catch (error) {
       return res
@@ -63,4 +66,37 @@ module.exports = {
         .send(utils.Error_Message.InternalError);
     }
   },
+
+  flipkartFetch: async () => {
+    const body = {
+      a: 1
+    };
+    fetch(
+        "https://www.flipkart.com/search?q=mobiles&sid=tyy%2C4io&as=on&as-show=on&otracker=AS_QueryStore_OrganicAutoSuggest_1_7_na_na_na&otracker1=AS_QueryStore_OrganicAutoSuggest_1_7_na_na_na&as-pos=1&as-type=HISTORY&suggestionId=mobiles%7CMobiles&requestId=c101808f-c71a-4609-b769-69471c4e9b5a", {
+          method: "post",
+          body: JSON.stringify(body),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((res) => res.text())
+      .then((Result) => console.log(Result));
+  },
+  snapdealFetch: () => {
+    const body = {
+      a: 1
+    };
+    fetch(
+        "https://www.snapdeal.com/search?keyword=tshirts&santizedKeyword=&catId=&categoryId=0&suggested=false&vertical=&noOfResults=20&searchState=&clickSrc=go_header&lastKeyword=&prodCatId=&changeBackToAll=false&foundInAll=false&categoryIdSearched=&cityPageUrl=&categoryUrl=&url=&utmContent=&dealDetail=&sort=rlvncy/post", {
+          method: 'post',
+          body: JSON.stringify(body),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+      .then(res => res.text())
+      .then(json => console.log(json))
+
+  }
 };

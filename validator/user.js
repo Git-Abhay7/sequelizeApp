@@ -1,7 +1,7 @@
 const { check } = require("express-validator");
 
 module.exports = {
-  create: () => { 
+  create: () => {
     return [
       check("firstName").notEmpty().withMessage("Please fill firstName  field"),
       check("email").notEmpty().withMessage("Please fill Email field."),
@@ -13,11 +13,17 @@ module.exports = {
   },
   valid: () => {
     return [
-      check("user_id").notEmpty().withMessage("Please fill userId field"),
-      check("mobileNumber")
-        .notEmpty()
-        .withMessage("Please fill mobileNumber field."),
-      check("dob").notEmpty().withMessage("Please fill dob field.").isISO8601(),
+      check("email").notEmpty().withMessage("Please fill Email field"),
+      check("password").notEmpty().withMessage("Please fill Password."),
+    ];
+  },
+
+  Valid: () => {
+    return [
+      check("city").notEmpty().withMessage("Please fill city"),
+      check("phoneNo").notEmpty().withMessage("Please fill phone Number."),
+      check("address").notEmpty().withMessage("Please fill address"),
+      check("pinCode").notEmpty().withMessage("Please fill PinCode."),
     ];
   },
 };

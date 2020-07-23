@@ -9,7 +9,7 @@ module.exports = {
         errors: errors.array(),
       });
     } else {
-      next();
+     return  next();
     }
   },
 };

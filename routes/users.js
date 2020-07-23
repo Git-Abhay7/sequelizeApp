@@ -21,4 +21,6 @@ router.get("/getUser/:_id", usercontroller.getUser);
 
 router.get("/fetch", usercontroller.flipkartFetch);
 router.get("/snapfetch", usercontroller.snapdealFetch);
+router.get("/url", usercontroller.Urls);
+
 module.exports = router;
